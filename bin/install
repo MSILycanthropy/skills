@@ -59,10 +59,10 @@ for skill in "${skills[@]}"; do
         current_target="$(readlink "$target_path")"
         if [[ "$current_target" == "$source_path" ]]; then
             echo -e "  ${YELLOW}⊘${NC} $skill (already linked)"
-            ((skipped++))
+            ((skipped++)) || true
         else
             echo -e "  ${YELLOW}⚠${NC} $skill exists but points elsewhere: $current_target"
-            ((skipped++))
+            ((skipped++)) || true
         fi
     elif [[ -d "$target_path" ]]; then
         echo -e "  ${YELLOW}⚠${NC} $skill exists as directory (skipping)"
@@ -70,7 +70,7 @@ for skill in "${skills[@]}"; do
     else
         ln -s "$source_path" "$target_path"
         echo -e "  ${GREEN}✓${NC} $skill"
-        ((installed++))
+        ((installed++)) || true
     fi
 done
 

@@ -45,10 +45,10 @@ for skill in "${skills[@]}"; do
         if [[ "$current_target" == "$SKILLS_SOURCE/$skill" ]]; then
             rm "$target_path"
             echo -e "  ${RED}✗${NC} $skill (removed)"
-            ((removed++))
+            ((removed++)) || true
         else
             echo -e "  ${YELLOW}⊘${NC} $skill (points elsewhere, skipping)"
-            ((skipped++))
+            ((skipped++)) || true
         fi
     else
         echo -e "  ${YELLOW}⊘${NC} $skill (not installed)"
