@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Walkthrough: TITLE_HERE</title>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
     <style>
       *,
       *::before,
@@ -16,8 +17,8 @@
       body {
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        background: #0f172a;
-        color: #e2e8f0;
+        background: #000;
+        color: #d4d4d4;
         min-height: 100vh;
         padding: 2rem;
       }
@@ -29,29 +30,32 @@
         font-size: 1.75rem;
         font-weight: 700;
         margin-bottom: 0.5rem;
-        color: #f8fafc;
+        color: #fff;
       }
       .subtitle {
-        color: #94a3b8;
+        color: #737373;
         margin-bottom: 2rem;
         font-size: 0.95rem;
       }
       .card {
-        background: #1e293b;
-        border: 1px solid #334155;
+        background: #0a0a0a;
+        border: 1px solid #262626;
         border-radius: 12px;
         padding: 1.5rem;
         margin-bottom: 1.5rem;
       }
       .card h2 {
         font-size: 1.1rem;
-        color: #93c5fd;
+        color: #a3a3a3;
         margin-bottom: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 500;
       }
       .card p,
       .card li {
         line-height: 1.7;
-        color: #cbd5e1;
+        color: #a3a3a3;
       }
       .card ul {
         padding-left: 1.25rem;
@@ -59,10 +63,29 @@
       .card li {
         margin-bottom: 0.4rem;
       }
-      .mermaid {
-        background: #0f172a;
-        padding: 1rem;
+      .diagram-container {
+        position: relative;
+        background: #000;
+        border: 1px solid #262626;
         border-radius: 8px;
+        overflow: hidden;
+        min-height: 400px;
+      }
+      .diagram-container svg {
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 400px;
+      }
+      .zoom-hint {
+        position: absolute;
+        bottom: 0.75rem;
+        right: 0.75rem;
+        font-size: 0.7rem;
+        color: #525252;
+        pointer-events: none;
+      }
+      .mermaid {
+        padding: 1rem;
         text-align: center;
       }
       .components {
@@ -71,26 +94,26 @@
         gap: 1rem;
       }
       .component {
-        background: #0f172a;
-        border: 1px solid #334155;
+        background: #000;
+        border: 1px solid #262626;
         border-radius: 8px;
         padding: 1rem;
       }
       .component h3 {
         font-size: 0.95rem;
-        color: #7dd3fc;
+        color: #e5e5e5;
         margin-bottom: 0.4rem;
       }
       .component p {
         font-size: 0.85rem;
-        color: #94a3b8;
+        color: #737373;
         line-height: 1.5;
       }
       .takeaways li {
-        color: #fbbf24;
+        color: #d4d4d4;
       }
       .takeaways li span {
-        color: #cbd5e1;
+        color: #a3a3a3;
       }
     </style>
   </head>
@@ -101,10 +124,12 @@
 
       <div class="card">
         <h2>Architecture Diagram</h2>
-        <pre class="mermaid">
+        <div class="diagram-container">
+          <pre class="mermaid">
 MERMAID_DIAGRAM_HERE
-      </pre
-        >
+          </pre>
+          <span class="zoom-hint">scroll to zoom · drag to pan</span>
+        </div>
       </div>
 
       <div class="card">
@@ -131,15 +156,35 @@ MERMAID_DIAGRAM_HERE
         startOnLoad: true,
         theme: "dark",
         themeVariables: {
-          primaryColor: "#1e293b",
-          primaryTextColor: "#e2e8f0",
-          primaryBorderColor: "#3b82f6",
-          lineColor: "#64748b",
-          secondaryColor: "#1e293b",
-          tertiaryColor: "#0f172a",
+          primaryColor: "#171717",
+          primaryTextColor: "#d4d4d4",
+          primaryBorderColor: "#404040",
+          lineColor: "#525252",
+          secondaryColor: "#0a0a0a",
+          tertiaryColor: "#000",
           fontFamily:
             '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         },
+      });
+
+      // After Mermaid renders, attach svg-pan-zoom to each diagram
+      mermaid.run().then(() => {
+        document.querySelectorAll(".diagram-container svg").forEach((svg) => {
+          // Remove any fixed width/height so it fills the container
+          svg.removeAttribute("style");
+          svg.setAttribute("width", "100%");
+          svg.setAttribute("height", "100%");
+
+          svgPanZoom(svg, {
+            zoomEnabled: true,
+            controlIconsEnabled: false,
+            fit: true,
+            center: true,
+            minZoom: 0.5,
+            maxZoom: 10,
+            zoomScaleSensitivity: 0.3,
+          });
+        });
       });
     </script>
   </body>

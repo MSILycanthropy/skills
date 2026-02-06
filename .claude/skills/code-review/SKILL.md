@@ -86,19 +86,6 @@ Display results in this **exact format**:
 | 3   | **MEDIUM**   | Performance  | `query.ts:91` | Brief problem desc | Why this matters | Suggested fix |
 | 4   | **LOW**      | Code Clarity | `utils.ts:7`  | Brief problem desc | Why this matters | Suggested fix |
 
-After displaying the table, write a summary using the bundled `scripts/review_summary.sh` script to render colored output in the terminal:
-
-```bash
-bash .claude/skills/code-review/scripts/review_summary.sh \
-  --critical <count> \
-  --high <count> \
-  --medium <count> \
-  --low <count> \
-  --checks "Bugs & Logic:pass,Security:pass,Error Handling:pass,Concurrency:skip:no concurrent code"
-```
-
-This renders a colored severity breakdown and check list. Pass counts of 0 for severities with no issues. For each check, use `pass` if it was run or `skip:<reason>` if it was skipped.
-
 ---
 
 #### Severity Definitions

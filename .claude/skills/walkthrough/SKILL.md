@@ -71,7 +71,21 @@ Generate an interactive HTML file using the template at `templates/diagram.html`
 3. Write the populated HTML to `/tmp/walkthrough_diagram.html`.
 4. Run `bash .claude/skills/walkthrough/scripts/render.sh` to open it.
 
-If the system is complex enough for multiple diagrams, create multiple `.card` sections each with their own Mermaid block.
+Each Mermaid diagram must be wrapped in a `<div class="diagram-container">` so that svg-pan-zoom attaches correctly:
+
+```html
+<div class="card">
+  <h2>Section Title</h2>
+  <div class="diagram-container">
+    <pre class="mermaid">
+      ...diagram here...
+    </pre>
+    <span class="zoom-hint">scroll to zoom · drag to pan</span>
+  </div>
+</div>
+```
+
+If the system is complex enough for multiple diagrams, create multiple `.card` sections each with their own `diagram-container` block.
 
 ## Terminal Output
 
