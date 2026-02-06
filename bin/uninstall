@@ -14,7 +14,23 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
+CLAUDE_MD_SOURCE="$SCRIPT_DIR/CLAUDE.md"
+CLAUDE_MD_TARGET="$HOME/.claude/CLAUDE.md"
+
 echo "Uninstalling skills..."
+
+# Remove CLAUDE.md symlink
+if [[ -L "$CLAUDE_MD_TARGET" ]]; then
+    current_target="$(readlink "$CLAUDE_MD_TARGET")"
+    if [[ "$current_target" == "$CLAUDE_MD_SOURCE" ]]; then
+        rm "$CLAUDE_MD_TARGET"
+        echo -e "  ${RED}✗${NC} CLAUDE.md (removed)"
+    else
+        echo -e "  ${YELLOW}⊘${NC} CLAUDE.md (points elsewhere, skipping)"
+    fi
+else
+    echo -e "  ${YELLOW}⊘${NC} CLAUDE.md (not installed)"
+fi
 
 skills=($(ls -d "$SKILLS_SOURCE"/*/ 2>/dev/null | xargs -n1 basename))
 
