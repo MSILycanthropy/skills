@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Skills Uninstaller
+# Removes symlinks from ~/.claude/skills/ that point to this repo
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SKILLS_SOURCE="$SCRIPT_DIR/.claude/skills"
+SKILLS_TARGET="$HOME/.claude/skills"
+
+# Colors
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+NC='\033[0m'
+
+echo "Uninstalling skills..."
+
+skills=($(ls -d "$SKILLS_SOURCE"/*/ 2>/dev/null | xargs -n1 basename))
+
+removed=0
+skipped=0
+
+for skill in "${skills[@]}"; do
+    target_path="$SKILLS_TARGET/$skill"
+
+    if [[ -L "$target_path" ]]; then
+        current_target="$(readlink "$target_path")"
+        if [[ "$current_target" == "$SKILLS_SOURCE/$skill" ]]; then
+            rm "$target_path"
+            echo -e "  ${RED}✗${NC} $skill (removed)"
+            ((removed++))
+        else
+            echo -e "  ${YELLOW}⊘${NC} $skill (points elsewhere, skipping)"
+            ((skipped++))
+        fi
+    else
+        echo -e "  ${YELLOW}⊘${NC} $skill (not installed)"
+        ((skipped++))
+    fi
+done
+
+echo ""
+echo -e "${GREEN}Done!${NC} Removed: $removed, Skipped: $skipped"

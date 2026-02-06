@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walkthrough: TITLE_HERE</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+        min-height: 100vh;
+        padding: 2rem;
+      }
+      .container {
+        max-width: 960px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: #f8fafc;
+      }
+      .subtitle {
+        color: #94a3b8;
+        margin-bottom: 2rem;
+        font-size: 0.95rem;
+      }
+      .card {
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+      .card h2 {
+        font-size: 1.1rem;
+        color: #93c5fd;
+        margin-bottom: 1rem;
+      }
+      .card p,
+      .card li {
+        line-height: 1.7;
+        color: #cbd5e1;
+      }
+      .card ul {
+        padding-left: 1.25rem;
+      }
+      .card li {
+        margin-bottom: 0.4rem;
+      }
+      .mermaid {
+        background: #0f172a;
+        padding: 1rem;
+        border-radius: 8px;
+        text-align: center;
+      }
+      .components {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1rem;
+      }
+      .component {
+        background: #0f172a;
+        border: 1px solid #334155;
+        border-radius: 8px;
+        padding: 1rem;
+      }
+      .component h3 {
+        font-size: 0.95rem;
+        color: #7dd3fc;
+        margin-bottom: 0.4rem;
+      }
+      .component p {
+        font-size: 0.85rem;
+        color: #94a3b8;
+        line-height: 1.5;
+      }
+      .takeaways li {
+        color: #fbbf24;
+      }
+      .takeaways li span {
+        color: #cbd5e1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>TITLE_HERE</h1>
+      <p class="subtitle">SUBTITLE_OVERVIEW_HERE</p>
+
+      <div class="card">
+        <h2>Architecture Diagram</h2>
+        <pre class="mermaid">
+MERMAID_DIAGRAM_HERE
+      </pre
+        >
+      </div>
+
+      <div class="card">
+        <h2>Components</h2>
+        <div class="components">
+          <!-- Repeat this block for each component -->
+          <div class="component">
+            <h3>ComponentName</h3>
+            <p>Description of what this component does and its role.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card takeaways">
+        <h2>Key Takeaways</h2>
+        <ul>
+          <li><span>Takeaway description here.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <script>
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: "dark",
+        themeVariables: {
+          primaryColor: "#1e293b",
+          primaryTextColor: "#e2e8f0",
+          primaryBorderColor: "#3b82f6",
+          lineColor: "#64748b",
+          secondaryColor: "#1e293b",
+          tertiaryColor: "#0f172a",
+          fontFamily:
+            '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        },
+      });
+    </script>
+  </body>
+</html>

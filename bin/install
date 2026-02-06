@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Skills Installer
+# Symlinks skills from this repo to ~/.claude/skills/
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SKILLS_SOURCE="$SCRIPT_DIR/.claude/skills"
+SKILLS_TARGET="$HOME/.claude/skills"
+
+# Colors
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+echo -e "${BLUE}Installing skills from $SKILLS_SOURCE${NC}"
+
+# Create target directory if it doesn't exist
+mkdir -p "$SKILLS_TARGET"
+
+# Get list of skills
+skills=($(ls -d "$SKILLS_SOURCE"/*/ 2>/dev/null | xargs -n1 basename))
+
+if [[ ${#skills[@]} -eq 0 ]]; then
+    echo "No skills found in $SKILLS_SOURCE"
+    exit 1
+fi
+
+installed=0
+skipped=0
+
+for skill in "${skills[@]}"; do
+    source_path="$SKILLS_SOURCE/$skill"
+    target_path="$SKILLS_TARGET/$skill"
+
+    if [[ -L "$target_path" ]]; then
+        # Already a symlink - check if it points to our source
+        current_target="$(readlink "$target_path")"
+        if [[ "$current_target" == "$source_path" ]]; then
+            echo -e "  ${YELLOW}⊘${NC} $skill (already linked)"
+            ((skipped++))
+        else
+            echo -e "  ${YELLOW}⚠${NC} $skill exists but points elsewhere: $current_target"
+            ((skipped++))
+        fi
+    elif [[ -d "$target_path" ]]; then
+        echo -e "  ${YELLOW}⚠${NC} $skill exists as directory (skipping)"
+        ((skipped++))
+    else
+        ln -s "$source_path" "$target_path"
+        echo -e "  ${GREEN}✓${NC} $skill"
+        ((installed++))
+    fi
+done
+
+echo ""
+echo -e "${GREEN}Done!${NC} Installed: $installed, Skipped: $skipped"
+echo ""
+echo "Skills are now available in Claude Code. Try:"
+echo "  /building-skills"
+echo "  /code-review"
+echo "  /walkthrough"

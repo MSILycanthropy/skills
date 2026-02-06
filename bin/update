@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Skills Updater
+# Pulls latest changes and re-runs install
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+# Colors
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+cd "$SCRIPT_DIR"
+
+echo -e "${BLUE}Updating skills repository...${NC}"
+
+# Check for uncommitted changes
+if ! git diff --quiet 2>/dev/null || ! git diff --cached --quiet 2>/dev/null; then
+    echo "Warning: You have uncommitted changes. Stashing..."
+    git stash
+    STASHED=1
+else
+    STASHED=0
+fi
+
+# Pull latest
+git pull --rebase
+
+# Restore stash if we stashed
+if [[ $STASHED -eq 1 ]]; then
+    echo "Restoring stashed changes..."
+    git stash pop
+fi
+
+echo ""
+echo -e "${GREEN}Repository updated.${NC}"
+echo ""
+
+# Re-run install to pick up any new skills
+echo -e "${BLUE}Re-running install...${NC}"
+bash "$SCRIPT_DIR/bin/install"
