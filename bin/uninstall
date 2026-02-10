@@ -7,6 +7,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SKILLS_SOURCE="$SCRIPT_DIR/.claude/skills"
 SKILLS_TARGET="$HOME/.claude/skills"
+AGENTS_SOURCE="$SCRIPT_DIR/.claude/agents"
+AGENTS_TARGET="$HOME/.claude/agents"
 
 # Colors
 GREEN='\033[0;32m'
@@ -56,5 +58,35 @@ for skill in "${skills[@]}"; do
     fi
 done
 
+# Remove agent symlinks
+agents_removed=0
+agents_skipped=0
+
+if [[ -d "$AGENTS_SOURCE" ]]; then
+    echo ""
+    echo "Uninstalling agents..."
+
+    for agent_file in "$AGENTS_SOURCE"/*.md; do
+        [[ -f "$agent_file" ]] || continue
+        agent_name="$(basename "$agent_file")"
+        target_path="$AGENTS_TARGET/$agent_name"
+
+        if [[ -L "$target_path" ]]; then
+            current_target="$(readlink "$target_path")"
+            if [[ "$current_target" == "$agent_file" ]]; then
+                rm "$target_path"
+                echo -e "  ${RED}✗${NC} $agent_name (removed)"
+                ((agents_removed++)) || true
+            else
+                echo -e "  ${YELLOW}⊘${NC} $agent_name (points elsewhere, skipping)"
+                ((agents_skipped++)) || true
+            fi
+        else
+            echo -e "  ${YELLOW}⊘${NC} $agent_name (not installed)"
+            ((agents_skipped++)) || true
+        fi
+    done
+fi
+
 echo ""
-echo -e "${GREEN}Done!${NC} Removed: $removed, Skipped: $skipped"
+echo -e "${GREEN}Done!${NC} Skills: $removed removed, $skipped skipped. Agents: $agents_removed removed, $agents_skipped skipped."
